@@ -1,3 +1,4 @@
+
 package exercise.dto.users;
 
 import exercise.model.User;
@@ -12,3 +13,4 @@ public class UserPage {
     private User user;
 }
 // END
+

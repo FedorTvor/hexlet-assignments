@@ -6,7 +6,8 @@ import io.javalin.http.NotFoundResponse;
 import exercise.model.User;
 import exercise.dto.users.UserPage;
 import exercise.dto.users.UsersPage;
-import java.util.Collections;
+import static io.javalin.rendering.template.TemplateUtil.model;
+import io.javalin.rendering.template.JavalinJte;
 
 public final class App {
 
@@ -17,26 +18,27 @@ public final class App {
 
         var app = Javalin.create(config -> {
             config.bundledPlugins.enableDevLogging();
+            config.fileRenderer(new JavalinJte());
         });
 
         // BEGIN
         app.get("/users", ctx -> {
-            var page = new UsersPage(USERS);
-
-            ctx.render("users/index.jte", Collections.singletonMap("page", page));
+            UsersPage usersPage = new UsersPage(USERS);
+            ctx.render("users/index.jte", model("usersPage", usersPage));            
         });
 
         app.get("/users/{id}", ctx -> {
-            var id = ctx.pathParam("id");
-            var user = USERS.stream().filter(x -> id.equals(Long.toString(x.getId()))).findFirst();
+            Long userId = Long.parseLong(ctx.pathParam("id"));
+            User user = USERS.stream()
+                    .filter(user1 -> user1.getId()== userId)
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundResponse("User not found"));
 
-            if (user.isPresent()) {
-                var page = new UserPage(user.get());
-                ctx.render("users/show.jte", Collections.singletonMap("userPage", page));
-            } else {
-                throw new NotFoundResponse("User not found");
-            }
+            UserPage userPage = new UserPage(user);
+
+            ctx.render("users/show.jte", model("userPage", userPage));
         });
+
         // END
 
         app.get("/", ctx -> {
