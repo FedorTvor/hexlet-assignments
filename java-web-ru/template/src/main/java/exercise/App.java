@@ -1,4 +1,3 @@
-
 package exercise;
 
 import io.javalin.Javalin;
@@ -52,4 +51,3 @@ public final class App {
         app.start(7070);
     }
 }
-
