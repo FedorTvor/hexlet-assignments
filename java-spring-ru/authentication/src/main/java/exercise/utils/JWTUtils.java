@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 // BEGIN
 @Component
 public class JWTUtils {
-
     @Autowired
     private JwtEncoder encoder;
 

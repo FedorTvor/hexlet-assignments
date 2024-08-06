@@ -29,11 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import java.nio.charset.StandardCharsets;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exercise.repository.UserRepository;
 
@@ -42,9 +37,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @SpringBootTest
 @AutoConfigureMockMvc
 class ArticleControllerTest {
-
-    @Autowired
-    private WebApplicationContext wac;
 
     @Autowired
     private MockMvc mockMvc;
@@ -75,10 +67,6 @@ class ArticleControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
-                .apply(springSecurity())
-                .build();
         testArticle = Instancio.of(modelGenerator.getArticleModel()).create();
         testArticle.setAuthor(userUtils.getTestUser());
         token = jwt().jwt(builder -> builder.subject(userUtils.getTestUser().getEmail()));

@@ -22,10 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
-import java.nio.charset.StandardCharsets;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exercise.repository.UserRepository;
@@ -33,8 +29,6 @@ import exercise.repository.UserRepository;
 @SpringBootTest
 @AutoConfigureMockMvc
 class UsersControllerTest {
-    @Autowired
-    private WebApplicationContext wac;
 
     @Autowired
     private MockMvc mockMvc;
@@ -55,10 +49,6 @@ class UsersControllerTest {
 
     @BeforeEach
     public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-                .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
-                .apply(springSecurity())
-                .build();
         testUser = Instancio.of(modelGenerator.getUserModel()).create();
     }
 
