@@ -2,21 +2,25 @@ package exercise;
 
 // BEGIN
 public class MaxThread extends Thread {
-    private int result;
-    private final int[] numbers;
+    private int[] numbers;
+    private int max;
 
     public MaxThread(int[] numbers) {
         this.numbers = numbers;
     }
+
     @Override
     public void run() {
-        result = numbers[0];
-        for (int i : numbers) {
-            result = Math.max(i, result);
+        max = numbers[0];
+        for (int number : numbers) {
+            if (number > max) {
+                max = number;
+            }
         }
     }
-    public int getResult() {
-        return result;
+
+    public int getMax() {
+        return max;
     }
 }
 // END

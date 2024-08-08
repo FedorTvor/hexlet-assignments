@@ -1,29 +1,36 @@
 package exercise;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 
 class App {
     private static final Logger LOGGER = Logger.getLogger("AppLogger");
 
     // BEGIN
     public static Map<String, Integer> getMinMax(int[] numbers) {
-        var minThread = new MinThread(numbers);
-        var maxThread = new MaxThread(numbers);
-        minThread.start();
-        LOGGER.log(Level.INFO, "Thread " + minThread.getName() + " started...");
+        MaxThread maxThread = new MaxThread(numbers);
+        MinThread minThread = new MinThread(numbers);
+
+        LOGGER.info("Thread MaxThread started");
         maxThread.start();
-        LOGGER.log(Level.INFO, "Thread " + maxThread.getName() + " started...");
+        LOGGER.info("Thread MinThread started");
+        minThread.start();
+
         try {
-            minThread.join();
-            LOGGER.log(Level.INFO, "Thread " + minThread.getName() + " finished!");
             maxThread.join();
-            LOGGER.log(Level.INFO, "Thread " + maxThread.getName() + " finished!");
+            LOGGER.info("Thread MaxThread finished");
+            minThread.join();
+            LOGGER.info("Thread MinThread finished");
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        return Map.of("min", minThread.getResult(), "max", maxThread.getResult());
+
+        Map<String, Integer> result = new HashMap<>();
+        result.put("max", maxThread.getMax());
+        result.put("min", minThread.getMin());
+
+        return result;
     }
     // END
 }
